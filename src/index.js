@@ -3,20 +3,29 @@ import axios from 'axios';
 import ReactDOM from 'react-dom';
 import './index.css';
 
-const url="https://weather.tsukumijima.net/api/forecast?city=360010"
-
 function Day(props){
-    return(
-        <React.Fragment>
-            <div>{props.api.forecasts[props.day].dataLabel}</div>
-            <div class='icon'>
-                <img src={props.api.forecasts[props.day].image.url}/>
-            </div>
-            <div>{'場所：' + props.api.publicTimeFormatted}</div>
-            <div>{'i発表日時：' + props.api.publishingOffice}</div>
-            <div>{'天気：' + props.api.forecasts[props.day].telop}</div>
-        </React.Fragment>
-    );
+    let day='';
+    if(props.day==0){
+        day='今日';
+    }else{
+        day='明日';
+    }
+
+    if(props.api===''){
+        return <div>{"情報取得中"}</div>
+    }else{
+        return(
+            <React.Fragment>
+                <div>{day}</div>
+                <div class='icon'>
+                    <img src={props.api.forecasts[props.day].image.url}/>
+                </div>
+                <div>{'場所：' + props.api.publishingOffice}</div>
+                <div>{'発表日時：' + props.api.publicTimeFormatted}</div>
+                <div>{'天気：' + props.api.forecasts[props.day].telop}</div>
+            </React.Fragment>
+        );
+    }
 }
 
 class Weather extends React.Component {
@@ -26,15 +35,18 @@ class Weather extends React.Component {
             weather: ''
         }
     }
-    componentDidMount() {
-        axios.get(url).then(res => {
+    getAPI(){
+        axios.get("https://weather.tsukumijima.net/api/forecast?city=360010")
+            .then(res => {
             this.setState({
                 weather: res.data
             });
         })
+        return 0;
     }
 
     renderDay(i){
+        let a=this.getAPI();
         return(
             <Day
                 api={this.state.weather}
