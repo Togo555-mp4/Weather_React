@@ -35,7 +35,7 @@ class Weather extends React.Component {
             weather: ''
         }
     }
-    getAPI(){
+    componentDidMount(){
         axios.get("https://weather.tsukumijima.net/api/forecast?city=360010")
             .then(res => {
             this.setState({
@@ -46,7 +46,6 @@ class Weather extends React.Component {
     }
 
     renderDay(i){
-        let a=this.getAPI();
         return(
             <Day
                 api={this.state.weather}
